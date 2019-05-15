@@ -3,7 +3,7 @@ package com.eldarovich99.tinkoffnews.presentation
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.eldarovich99.tinkoffnews.R
-import com.eldarovich99.tinkoffnews.presentation.Newsfeed.NewsFeedFragment
+import com.eldarovich99.tinkoffnews.presentation.newsfeed.NewsFeedFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val binding =
 
         supportFragmentManager
             .beginTransaction()

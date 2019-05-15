@@ -1,4 +1,4 @@
-package com.eldarovich99.tinkoffnews.presentation.Newsfeed
+package com.eldarovich99.tinkoffnews.presentation.newsfeed
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
