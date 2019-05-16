@@ -25,6 +25,7 @@ android {
     dataBinding {
         enabled = true
     }
+    kapt { generateStubs = true }
 }
 
 dependencies {
@@ -37,7 +38,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // Kotlin
-    apply plugin: 'kotlin-kapt'
     apply plugin: 'com.android.application'
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-android-extensions'
@@ -76,9 +76,6 @@ dependencies {
 
     // Databinding
     implementation 'com.android.databinding:library:3.5.0-beta01'
-    kapt 'com.android.databinding:compiler:3.1.4'
-}
-
-kapt {
-    generateStubs = true
+    //kapt 'com.android.databinding:compiler:3.1.4'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
 }

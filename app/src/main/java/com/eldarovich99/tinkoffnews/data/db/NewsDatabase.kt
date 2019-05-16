@@ -7,7 +7,7 @@ import android.content.Context
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 
-@Database(entities = [News::class], version = 1)
+@Database(entities = [News::class], version = 1, exportSchema = false)
 abstract class NewsDatabase: RoomDatabase() {
     abstract fun newsDao(): NewsDao
     companion object {

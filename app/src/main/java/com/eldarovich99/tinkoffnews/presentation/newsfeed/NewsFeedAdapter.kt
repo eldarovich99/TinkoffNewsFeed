@@ -27,7 +27,7 @@ class NewsFeedAdapter internal constructor(
 
     override fun onBindViewHolder(holder: NewsFeedViewHolder, position: Int) {
         val current = news[position]
-        holder.wordItemView.text = current.payload.title.text
+        holder.wordItemView.text = current.text
     }
 
     internal fun setNews(news: List<News>) {

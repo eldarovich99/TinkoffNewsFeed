@@ -20,8 +20,13 @@ class NewsFeedFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        news_feed_recycler.adapter = NewsFeedAdapter(context!!)
 
         return inflater.inflate(R.layout.news_feed_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        news_feed_recycler.adapter = NewsFeedAdapter(context!!)
+
+        super.onViewCreated(view, savedInstanceState)
     }
 }
