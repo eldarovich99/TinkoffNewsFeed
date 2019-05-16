@@ -37,7 +37,7 @@ class NewsFeedAdapter internal constructor(
 
     override fun getItemCount() = news.size
 
-    fun getTaskAtPosition(position: Int): News {
+    fun getNewsAtPosition(position: Int): News {
         return news[position]
     }
 }

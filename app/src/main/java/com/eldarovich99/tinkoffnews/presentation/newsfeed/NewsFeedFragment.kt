@@ -29,10 +29,11 @@ class NewsFeedFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val adapter = NewsFeedAdapter(context!!)
         viewModel.allNews.observe(this, Observer {news->
-            news?.let { adapter.setNews(news) }
+            news?.let {
+                adapter.setNews(news)
+            }
         })
-        news_feed_recycler.adapter
-        Toast.makeText(context, "NewsFragment created", Toast.LENGTH_LONG).show()
+        news_feed_recycler.adapter = adapter
         super.onViewCreated(view, savedInstanceState)
     }
 }
