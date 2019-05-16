@@ -9,7 +9,7 @@ import retrofit2.http.Query
 //
 //private const val BASE_URL = "https://api.tinkoff.ru/"
 //
-//private val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+
 //private val retrofit = Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(MoshiConverterFactory.create(moshi)).build()
 
 interface TinkoffApi{
