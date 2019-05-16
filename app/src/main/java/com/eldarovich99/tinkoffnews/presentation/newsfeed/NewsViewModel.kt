@@ -2,6 +2,7 @@ package com.eldarovich99.tinkoffnews.presentation.newsfeed
 
 import android.app.Application
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
@@ -15,11 +16,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class NewsViewModel @Inject constructor(application: Application,
-                                           private var newsDao: NewsDao,
-                                           private var newsRepository: NewsRepository):
+class NewsViewModel:
 ViewModel() { //If you need the application context, use AndroidViewModel.
-    lateinit var allNews: LiveData<List<News>>
+    var allNews = MutableLiveData<List<News>>()
     private lateinit var compositeDisposable: CompositeDisposable
 
     init {
@@ -31,8 +30,8 @@ ViewModel() { //If you need the application context, use AndroidViewModel.
         val disposable = api.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{ news -> cacheNews(news)}
-        compositeDisposable.add(disposable)
+            .subscribe{ news -> allNews.postValue(news)}
+        compositeDisposable = CompositeDisposable(disposable)
 //        TinkoffApi.tinkoffService.getNews().ob
     }
 

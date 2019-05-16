@@ -4,12 +4,14 @@ import android.arch.lifecycle.LiveData
 import android.support.annotation.WorkerThread
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.News
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
-    val allNews: LiveData<List<News>> = newsDao.getAllNews()
+    val allNews: Flowable<List<News>> = newsDao.getAllNews()
 
     @WorkerThread       // called on a worker thread
     fun insert(news: News){     // the modifier means that a function can be interrupted and then continued
@@ -20,7 +22,7 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
         newsDao.delete(news)
     }
     @WorkerThread
-    fun getNews(id:Int) : LiveData<List<News>> {
+    fun getNews(id:Int) : Flowable<List<News>> {
         return newsDao.getAllNews()
     }
 
