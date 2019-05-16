@@ -30,7 +30,7 @@ ViewModel() { //If you need the application context, use AndroidViewModel.
         val disposable = api.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{ news -> allNews.postValue(news)}
+            .subscribe{ news -> allNews.postValue(news.payload)}
         compositeDisposable = CompositeDisposable(disposable)
 //        TinkoffApi.tinkoffService.getNews().ob
     }

@@ -1,8 +1,11 @@
 package com.eldarovich99.tinkoffnews.data.network
 
 import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.data.db.entity.Response
 import io.reactivex.Observable
 import retrofit2.http.GET
+import retrofit2.http.Query
+
 //
 //private const val BASE_URL = "https://api.tinkoff.ru/"
 //
@@ -11,7 +14,10 @@ import retrofit2.http.GET
 
 interface TinkoffApi{
     @GET("v1/news")
-    fun getNews(): Observable<List<News>>
+    fun getNews(): Observable<Response>
+
+//    @GET("v1/news")
+//    fun getPayload(@Query("payload")) :
 }
 
 //object TinkoffApi{

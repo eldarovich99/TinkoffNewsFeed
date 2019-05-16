@@ -29,5 +29,4 @@ ext {
     roomVersion = '1.1.1'
     archLifecycleVersion = '1.1.1'
     retrofitVersion = '2.5.0'
-    moshiVersion = '1.8.0'
 }

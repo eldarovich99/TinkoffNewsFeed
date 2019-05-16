@@ -7,6 +7,6 @@ import android.arch.persistence.room.PrimaryKey
 data class News(var  name:String,
                  @PrimaryKey var id: String,
                  var text: String,
-                 var publicationDate: String,
+                 var publicationDate: Int,
                  var bankInfoTypeId: String
 )
