@@ -4,7 +4,7 @@
           package="com.eldarovich99.tinkoffnews">
 
     <dist:module dist:instant="true"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
             android:name=".App"
             android:allowBackup="true"
