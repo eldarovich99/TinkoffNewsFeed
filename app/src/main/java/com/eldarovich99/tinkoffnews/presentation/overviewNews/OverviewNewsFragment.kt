@@ -36,11 +36,8 @@ class OverviewNewsFragment: Fragment() {
         val view = inflater.inflate(R.layout.overview_fragment, container, false)
         view.name_text_view.text = viewModel.news.name
         view.content_text_view.text = viewModel.news.text
-        view.content_text_view.text = viewModel.news.id
+        view.id_text_view.text = viewModel.news.id
         view.date_text_view.text = Date(viewModel.news.publicationDate.milliseconds).toString()
         return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     }
 }

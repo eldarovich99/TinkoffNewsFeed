@@ -57,6 +57,11 @@ class NewsFeedFragment: Fragment() {
         }
         super.onViewCreated(view, savedInstanceState)
     }
+
+    override fun onDetach() {
+        activity?.finish()
+        super.onDetach()
+    }
 }
 
 interface IOpenFragmentListener{
