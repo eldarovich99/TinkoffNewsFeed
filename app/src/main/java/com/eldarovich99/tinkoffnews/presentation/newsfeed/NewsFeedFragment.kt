@@ -7,10 +7,13 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.eldarovich99.tinkoffnews.R
+import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.presentation.overviewNews.OverviewNewsFragment
 import kotlinx.android.synthetic.main.news_feed_fragment.*
 
+
+const val BUNDLE_KEY  = "bundle"
 class NewsFeedFragment: Fragment() {
     private val viewModel: NewsViewModel by lazy {
         ViewModelProviders.of(this).get(NewsViewModel::class.java)
@@ -27,13 +30,31 @@ class NewsFeedFragment: Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = NewsFeedAdapter(context!!)
+        val adapter = NewsFeedAdapter(context!!, object : IOpenFragmentListener{
+            override fun openFragment(news: News) {
+                val bundle = Bundle()
+                bundle.putParcelable(BUNDLE_KEY, news)
+                activity!!.supportFragmentManager!!
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, OverviewNewsFragment.newInstance(Bundle()))
+                    .addToBackStack(null)
+                    .commit()
+            }
+        })
         viewModel.allNews.observe(this, Observer {news->
             news?.let {
                 adapter.setNews(news)
             }
         })
         news_feed_recycler.adapter = adapter
+        swipe_refresh_layout.setOnRefreshListener {
+            viewModel.getNewsList()
+            //swipe_refresh_layout.isRefreshing = false
+        }
         super.onViewCreated(view, savedInstanceState)
     }
+}
+
+interface IOpenFragmentListener{
+    fun openFragment(news: News)
 }

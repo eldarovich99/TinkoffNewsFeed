@@ -9,15 +9,15 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class NewsViewModel:
-ViewModel() { //If you need the application context, use AndroidViewModel.
+ViewModel() {
     var allNews = MutableLiveData<List<News>>()
     private lateinit var compositeDisposable: CompositeDisposable
 
     init {
-        getNews()
+        getNewsList()
     }
 
-    private fun getNews(){
+    fun getNewsList(){
         val api = TinkoffClient.Instance.api
         val disposable = api.getResponse()
             .subscribeOn(Schedulers.io())

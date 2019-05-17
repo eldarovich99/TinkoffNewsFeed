@@ -10,7 +10,7 @@ import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 
 class NewsFeedAdapter internal constructor(
-    context: Context
+    context: Context, val listener: IOpenFragmentListener
 ) : RecyclerView.Adapter<NewsFeedAdapter.NewsFeedViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
@@ -22,7 +22,11 @@ class NewsFeedAdapter internal constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsFeedViewHolder {
         val itemView = inflater.inflate(R.layout.news_item, parent, false)
-        return NewsFeedViewHolder(itemView)
+        val holder =  NewsFeedViewHolder(itemView)
+        itemView.setOnClickListener {
+            listener.openFragment(news[holder.adapterPosition])
+        }
+        return holder
     }
 
     override fun onBindViewHolder(holder: NewsFeedViewHolder, position: Int) {

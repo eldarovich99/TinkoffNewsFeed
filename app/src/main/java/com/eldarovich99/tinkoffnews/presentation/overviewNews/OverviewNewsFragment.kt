@@ -9,6 +9,13 @@ import android.view.ViewGroup
 import com.eldarovich99.tinkoffnews.databinding.OverviewFragmentBinding
 
 class OverviewNewsFragment: Fragment() {
+    companion object {
+        fun newInstance(bundle: Bundle): OverviewNewsFragment {
+            val fragment = OverviewNewsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
     private val viewModel:OverviewViewModel by lazy{
         ViewModelProviders.of(this).get(OverviewViewModel::class.java)
     }
