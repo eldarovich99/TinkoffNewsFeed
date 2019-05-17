@@ -1,7 +1,7 @@
 package com.eldarovich99.tinkoffnews.presentation
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.presentation.newsfeed.NewsFeedFragment
 
@@ -11,9 +11,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if (supportFragmentManager.backStackEntryCount == 0)
         supportFragmentManager
             .beginTransaction()
-            .add(R.id.fragment_container, NewsFeedFragment.newInstance())
+            .replace(R.id.fragment_container, NewsFeedFragment.newInstance())
+            .addToBackStack(null)
             .commit()
     }
 }

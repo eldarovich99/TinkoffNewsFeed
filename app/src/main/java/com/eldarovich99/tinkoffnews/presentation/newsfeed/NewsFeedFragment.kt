@@ -13,7 +13,6 @@ import com.eldarovich99.tinkoffnews.presentation.overviewNews.OverviewNewsFragme
 import kotlinx.android.synthetic.main.news_feed_fragment.*
 
 
-const val BUNDLE_KEY  = "bundle"
 class NewsFeedFragment: Fragment() {
     private val viewModel: NewsViewModel by lazy {
         ViewModelProviders.of(this).get(NewsViewModel::class.java)
@@ -23,20 +22,25 @@ class NewsFeedFragment: Fragment() {
         fun newInstance() : NewsFeedFragment{
             return NewsFeedFragment()
         }
+
+        const val BUNDLE_KEY  = "bundle"
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.news_feed_fragment, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        retainInstance = true
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val adapter = NewsFeedAdapter(context!!, object : IOpenFragmentListener{
             override fun openFragment(news: News) {
-                val bundle = Bundle()
-                bundle.putParcelable(BUNDLE_KEY, news)
                 activity!!.supportFragmentManager!!
                     .beginTransaction()
-                    .replace(R.id.fragment_container, OverviewNewsFragment.newInstance(Bundle()))
+                    .replace(R.id.fragment_container, OverviewNewsFragment.newInstance(news))
                     .addToBackStack(null)
                     .commit()
             }

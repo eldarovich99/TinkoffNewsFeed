@@ -19,5 +19,7 @@
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="android:background">?attr/colorPrimary</item>
     </style>
-
+    <style name="SubText" parent="MainText">
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>
