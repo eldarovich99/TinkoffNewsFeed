@@ -10,6 +10,7 @@ import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 import com.eldarovich99.tinkoffnews.presentation.newsfeed.NewsFeedFragment
 import kotlinx.android.synthetic.main.overview_fragment.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class OverviewNewsFragment: Fragment() {
@@ -34,10 +35,14 @@ class OverviewNewsFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel.news = arguments?.getParcelable(NewsFeedFragment.BUNDLE_KEY)!!
         val view = inflater.inflate(R.layout.overview_fragment, container, false)
-        view.name_text_view.text = viewModel.news.name
+        val titleRaw = viewModel.news.name.split("-").filter { item -> item.toIntOrNull() == null }.toMutableList()
+        titleRaw[0] = titleRaw[0].capitalize()
+        view.name_text_view.text = titleRaw.joinToString(" ")
         view.content_text_view.text = viewModel.news.text
-        view.id_text_view.text = viewModel.news.id
-        view.date_text_view.text = Date(viewModel.news.publicationDate.milliseconds).toString()
+        view.id_text_view.text = getString(R.string.id, viewModel.news.id)
+        view.date_text_view.text = SimpleDateFormat("dd.mm.yyyy", Locale("ru"))
+            .format(Date(viewModel.news.publicationDate.milliseconds))
+            .toString()
         return view
     }
 }
