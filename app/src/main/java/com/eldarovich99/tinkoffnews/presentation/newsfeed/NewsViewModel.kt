@@ -2,7 +2,6 @@ package com.eldarovich99.tinkoffnews.presentation.newsfeed
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,9 +22,13 @@ ViewModel() { //If you need the application context, use AndroidViewModel.
         val disposable = api.getResponse()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{ news -> allNews.postValue(news.payload)}
+            .map { response ->
+                val data = response.payload.toMutableList()
+                data.sortByDescending { it.publicationDate.milliseconds }
+                 data.toList()
+            }
+            .subscribe{ news -> allNews.postValue(news)}
         compositeDisposable = CompositeDisposable(disposable)
-//        TinkoffApi.tinkoffService.getResponse().ob
     }
 
     override fun onCleared() {
@@ -34,6 +37,5 @@ ViewModel() { //If you need the application context, use AndroidViewModel.
     }
 
     private fun cacheNews(news:List<News>){
-        Log.d("news", "looks cached")
     }
 }
