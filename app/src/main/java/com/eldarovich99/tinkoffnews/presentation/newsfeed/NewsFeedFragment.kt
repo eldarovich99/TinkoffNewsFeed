@@ -22,6 +22,7 @@ class NewsFeedFragment: Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var adapter: NewsFeedAdapter
+    private var fragmentView: View? = null
     companion object {
         fun newInstance() : NewsFeedFragment{
             return NewsFeedFragment()
@@ -31,7 +32,8 @@ class NewsFeedFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.news_feed_fragment, container, false)
+        fragmentView = inflater.inflate(R.layout.news_feed_fragment, container, false)
+        return fragmentView
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +45,7 @@ class NewsFeedFragment: Fragment() {
         Injector.getAppComponent().inject(this)
         ViewModelProviders.of(this, viewModelFactory).get(NewsViewModel::class.java)
         retainInstance = true
-        adapter = NewsFeedAdapter(context!!, object : IOpenFragmentListener{
+        adapter = NewsFeedAdapter(object : IOpenFragmentListener{
             override fun openFragment(news: News) {
                 activity!!.supportFragmentManager!!
                     .beginTransaction()
@@ -72,6 +74,7 @@ class NewsFeedFragment: Fragment() {
 
     override fun onDestroyView() {
         news_feed_recycler.adapter = null
+        fragmentView = null
         super.onDestroyView()
     }
 
