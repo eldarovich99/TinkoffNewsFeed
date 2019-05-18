@@ -8,10 +8,16 @@ import io.reactivex.Flowable
 interface NewsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(news: News)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(news: List<News>)
+
     @Delete
     fun delete(news:News)
+
     @Query("SELECT * FROM news")
     fun getAllNews(): Flowable<List<News>>
+
+    @Query("SELECT * FROM news WHERE id = :id")
+    fun getContent(id:String) : Flowable<News>
 }

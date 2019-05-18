@@ -2,6 +2,7 @@ package com.eldarovich99.tinkoffnews.di.components
 
 import android.arch.lifecycle.ViewModel
 import com.eldarovich99.tinkoffnews.presentation.newsfeed.NewsViewModel
+import com.eldarovich99.tinkoffnews.presentation.overviewNews.OverviewViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -12,6 +13,10 @@ abstract class ViewModelModule{
     @Binds
     @ViewModelKey(NewsViewModel::class)
     abstract fun newsFeedViewModel(newsFeedViewModel:NewsViewModel): ViewModel
+    @IntoMap
+    @Binds
+    @ViewModelKey(OverviewViewModel::class)
+    abstract fun overviewViewModel(newsFeedViewModel:OverviewViewModel): ViewModel
 //    @IntoMap
 //    @Binds
 //    @ViewModelKey(OverviewViewModel::class)

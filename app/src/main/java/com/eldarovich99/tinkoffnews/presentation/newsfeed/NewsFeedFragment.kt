@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.eldarovich99.tinkoffnews.Injector
 import com.eldarovich99.tinkoffnews.R
-import com.eldarovich99.tinkoffnews.data.db.entity.News
 import com.eldarovich99.tinkoffnews.di.factories.ViewModelFactory
 import com.eldarovich99.tinkoffnews.presentation.overviewNews.OverviewNewsFragment
 import io.reactivex.disposables.CompositeDisposable
@@ -48,10 +47,10 @@ class NewsFeedFragment: Fragment() {
         ViewModelProviders.of(this, viewModelFactory).get(NewsViewModel::class.java)
         retainInstance = true
         adapter = NewsFeedAdapter(object : IOpenFragmentListener{
-            override fun openFragment(news: News) {
+            override fun openFragment(id: String) {
                 activity!!.supportFragmentManager!!
                     .beginTransaction()
-                    .replace(R.id.fragment_container, OverviewNewsFragment.newInstance(news))
+                    .replace(R.id.fragment_container, OverviewNewsFragment.newInstance(id))
                     .addToBackStack(null)
                     .commit()
             }
@@ -70,17 +69,6 @@ class NewsFeedFragment: Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
     }
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        news_feed_recycler.adapter = adapter
-//        swipe_refresh_layout.setOnRefreshListener {
-//            compositeDisposable = viewModel.getNewsList()
-//                .doOnComplete {swipe_refresh_layout.isRefreshing = false}
-//                .subscribe{news -> viewModel.allNews.postValue(news)}
-//        }
-//
-//        super.onViewCreated(view, savedInstanceState)
-//    }
-
 
     override fun onDestroyView() {
         news_feed_recycler.adapter = null
@@ -96,5 +84,5 @@ class NewsFeedFragment: Fragment() {
 }
 
 interface IOpenFragmentListener{
-    fun openFragment(news: News)
+    fun openFragment(id: String)
 }

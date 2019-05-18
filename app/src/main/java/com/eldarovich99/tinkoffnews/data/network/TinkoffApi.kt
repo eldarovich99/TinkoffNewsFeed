@@ -9,5 +9,5 @@ interface TinkoffApi{
     @GET("v1/news")
     fun getNews(): Observable<Response>
     @GET("v1/news_content")
-    fun getContent(@Query("id")id:Int): Observable<Response>
+    fun getContent(@Query("id")id:String): Observable<Response>
 }

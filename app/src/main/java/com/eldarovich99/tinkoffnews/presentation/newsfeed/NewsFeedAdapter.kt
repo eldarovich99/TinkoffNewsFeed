@@ -20,7 +20,7 @@ class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.news_item, parent, false)
         val holder =  NewsFeedViewHolder(itemView)
         itemView.setOnClickListener {
-            listener.openFragment(news[holder.adapterPosition])
+            listener.openFragment(news[holder.adapterPosition].id)
         }
         return holder
     }

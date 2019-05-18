@@ -5,6 +5,7 @@ import android.support.annotation.WorkerThread
 import android.widget.Toast
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.data.db.entity.Response
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -16,10 +17,9 @@ import javax.inject.Singleton
 
 @Singleton
 class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
-    //val allNews: Observable<List<News>> = newsDao.getAllNews()
     val api = TinkoffClient.Instance.api
-    @WorkerThread       // called on a worker thread
-    fun insert(news: News){     // the modifier means that a function can be interrupted and then continued
+    @WorkerThread
+    fun insert(news: News){
         newsDao.insert(news)
     }
     @WorkerThread
@@ -29,6 +29,10 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
     @WorkerThread
     fun getNews() : Flowable<List<News>> {
         return newsDao.getAllNews()
+    }
+    @WorkerThread
+    fun getContentFromDB(id:String) : Flowable<News> {
+        return newsDao.getContent(id)
     }
 
     fun getNewsList(context: Context): Observable<List<News>>{
@@ -46,11 +50,17 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
                 Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
             }
             .onErrorResumeNext(getNews().toObservable())
-            //.onErrorResumeNext(getNews().toObservable())
-            //.onErrorResumeNext(Observable.just(emptyList()))
     }
 
-
+    fun getContent(context: Context, id: String) : Observable<Response>{
+        return api.getContent(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext{news -> launchInsertion(news.payload)}
+            .doOnError{
+                Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
+            }
+    }
 
     private fun launchInsertion(news:List<News>){
         Completable.fromAction{ newsDao.insert(news) }
