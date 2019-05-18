@@ -16,7 +16,7 @@ class NewsFeedAdapter internal constructor(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private var news = emptyList<News>() // Cached copy of news
 
-    inner class NewsFeedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class NewsFeedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val wordItemView: TextView = itemView.findViewById(R.id.title_text_view)
     }
 

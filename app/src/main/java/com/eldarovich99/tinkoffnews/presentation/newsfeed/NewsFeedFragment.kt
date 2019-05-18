@@ -21,7 +21,7 @@ class NewsFeedFragment: Fragment() {
     lateinit var viewModel: NewsViewModel
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-
+    private lateinit var adapter: NewsFeedAdapter
     companion object {
         fun newInstance() : NewsFeedFragment{
             return NewsFeedFragment()
@@ -35,14 +35,15 @@ class NewsFeedFragment: Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Injector.getAppComponent().inject(this)
-        ViewModelProviders.of(this, viewModelFactory).get(NewsViewModel::class.java)
-        retainInstance = true
+        init()
         super.onCreate(savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = NewsFeedAdapter(context!!, object : IOpenFragmentListener{
+    private fun init() {
+        Injector.getAppComponent().inject(this)
+        ViewModelProviders.of(this, viewModelFactory).get(NewsViewModel::class.java)
+        retainInstance = true
+        adapter = NewsFeedAdapter(context!!, object : IOpenFragmentListener{
             override fun openFragment(news: News) {
                 activity!!.supportFragmentManager!!
                     .beginTransaction()
@@ -56,12 +57,22 @@ class NewsFeedFragment: Fragment() {
                 adapter.setNews(news)
             }
         })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         news_feed_recycler.adapter = adapter
         swipe_refresh_layout.setOnRefreshListener {
             viewModel.getNewsList()
             //swipe_refresh_layout.isRefreshing = false
         }
+
         super.onViewCreated(view, savedInstanceState)
+    }
+
+
+    override fun onDestroyView() {
+        news_feed_recycler.adapter = null
+        super.onDestroyView()
     }
 
     override fun onDestroy() {
