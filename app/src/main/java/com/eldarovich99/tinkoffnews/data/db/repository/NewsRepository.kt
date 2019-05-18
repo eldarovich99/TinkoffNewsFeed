@@ -4,6 +4,7 @@ import android.support.annotation.WorkerThread
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -36,8 +37,16 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
             .map { response ->
                 val data = response.payload.toMutableList()
                 data.sortByDescending { it.publicationDate.milliseconds }
-                data.toList()
+                val list = data.toList()
+                launchInsertion(list)
+                list
             }
     }
 
+    private fun launchInsertion(news:List<News>){
+        Completable.fromAction{ newsDao.insert(news) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+    }
 }
