@@ -63,8 +63,7 @@ class NewsFeedFragment: Fragment() {
         news_feed_recycler.adapter = adapter
         swipe_refresh_layout.setOnRefreshListener {
             val disposable = viewModel.getNewsList()
-                .doOnComplete{swipe_refresh_layout.isRefreshing = false}
-                .doOnError{swipe_refresh_layout.isRefreshing = false}
+                .doOnNext{swipe_refresh_layout.isRefreshing = false}
                 .subscribe()
             compositeDisposable.add(disposable)
         }
