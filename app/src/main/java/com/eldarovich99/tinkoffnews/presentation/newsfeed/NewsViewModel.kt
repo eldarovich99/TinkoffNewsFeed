@@ -1,6 +1,7 @@
 package com.eldarovich99.tinkoffnews.presentation.newsfeed
 
-import android.arch.lifecycle.ViewModel
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 import com.eldarovich99.tinkoffnews.data.db.repository.NewsRepository
 import io.reactivex.Observable
@@ -10,13 +11,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NewsViewModel @Inject constructor(var newsRepository: NewsRepository):
-ViewModel() {
+class NewsViewModel @Inject constructor(application: Application, var newsRepository: NewsRepository):
+AndroidViewModel(application) {
     var allNews = mutableListOf<News>()
 
     fun getNewsList() : Observable<List<News>> {
         return newsRepository
-            .getNewsList()
+            .getNewsList(getApplication())
             .doOnNext{news -> allNews.addAll(news)}
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

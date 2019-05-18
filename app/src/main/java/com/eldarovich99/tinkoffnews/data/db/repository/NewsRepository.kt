@@ -1,6 +1,8 @@
 package com.eldarovich99.tinkoffnews.data.db.repository
 
+import android.content.Context
 import android.support.annotation.WorkerThread
+import android.widget.Toast
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
@@ -29,7 +31,7 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
         return newsDao.getAllNews()
     }
 
-    fun getNewsList(): Observable<List<News>>{
+    fun getNewsList(context: Context): Observable<List<News>>{
         return api.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -40,8 +42,12 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
                 launchInsertion(list)
                 list
             }
+            .doOnError{
+                Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
+            }
             .onErrorResumeNext(getNews().toObservable())
-            .onErrorResumeNext(Observable.just(emptyList()))
+            //.onErrorResumeNext(getNews().toObservable())
+            //.onErrorResumeNext(Observable.just(emptyList()))
     }
 
 
