@@ -26,7 +26,7 @@ class AppModule(var application: Application){
 
     @Provides
     @Singleton
-    fun providesNewssDao(): NewsDao {
+    fun providesNewsDao(): NewsDao {
         return database.newsDao()
     }
 

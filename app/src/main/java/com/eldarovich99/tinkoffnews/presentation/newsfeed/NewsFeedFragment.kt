@@ -7,16 +7,20 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.eldarovich99.tinkoffnews.Injector
 import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.di.factories.ViewModelFactory
 import com.eldarovich99.tinkoffnews.presentation.overviewNews.OverviewNewsFragment
 import kotlinx.android.synthetic.main.news_feed_fragment.*
+import javax.inject.Inject
 
 
 class NewsFeedFragment: Fragment() {
-    private val viewModel: NewsViewModel by lazy {
-        ViewModelProviders.of(this).get(NewsViewModel::class.java)
-    }
+    @Inject
+    lateinit var viewModel: NewsViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
     companion object {
         fun newInstance() : NewsFeedFragment{
@@ -31,6 +35,8 @@ class NewsFeedFragment: Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Injector.getAppComponent().inject(this)
+        ViewModelProviders.of(this, viewModelFactory).get(NewsViewModel::class.java)
         retainInstance = true
         super.onCreate(savedInstanceState)
     }
@@ -58,9 +64,9 @@ class NewsFeedFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onDetach() {
+    override fun onDestroy() {
         activity?.finish()
-        super.onDetach()
+        super.onDestroy()
     }
 }
 

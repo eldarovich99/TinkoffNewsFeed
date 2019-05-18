@@ -3,12 +3,13 @@ package com.eldarovich99.tinkoffnews.presentation.newsfeed
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.eldarovich99.tinkoffnews.data.db.entity.News
-import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.eldarovich99.tinkoffnews.data.db.repository.NewsRepository
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NewsViewModel:
+@Singleton
+class NewsViewModel @Inject constructor(var newsRepository: NewsRepository):
 ViewModel() {
     var allNews = MutableLiveData<List<News>>()
     private lateinit var compositeDisposable: CompositeDisposable
@@ -18,16 +19,7 @@ ViewModel() {
     }
 
     fun getNewsList(){
-        val api = TinkoffClient.Instance.api
-        val disposable = api.getResponse()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { response ->
-                val data = response.payload.toMutableList()
-                data.sortByDescending { it.publicationDate.milliseconds }
-                 data.toList()
-            }
-            .subscribe{ news -> allNews.postValue(news)}
+        val disposable = newsRepository.getNewsList().subscribe{news -> allNews.postValue(news)}
         compositeDisposable = CompositeDisposable(disposable)
     }
 

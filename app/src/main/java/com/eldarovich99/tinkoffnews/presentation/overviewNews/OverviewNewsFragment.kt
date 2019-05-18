@@ -33,6 +33,7 @@ class OverviewNewsFragment: Fragment() {
         ViewModelProviders.of(this).get(OverviewViewModel::class.java)
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        //Injector.getAppComponent().inject(this)
         viewModel.news = arguments?.getParcelable(NewsFeedFragment.BUNDLE_KEY)!!
         val view = inflater.inflate(R.layout.overview_fragment, container, false)
         val titleRaw = viewModel.news.name.split("-").filter { item -> item.toIntOrNull() == null }.toMutableList()

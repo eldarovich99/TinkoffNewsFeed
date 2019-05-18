@@ -39,6 +39,10 @@ class NewsFeedAdapter internal constructor(
         notifyDataSetChanged()
     }
 
+    internal fun updateNews(){
+
+    }
+
     override fun getItemCount() = news.size
 
     fun getNewsAtPosition(position: Int): News {

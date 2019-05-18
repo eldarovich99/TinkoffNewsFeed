@@ -1,11 +1,13 @@
 package com.eldarovich99.tinkoffnews.data.db.repository
 
-import android.arch.lifecycle.LiveData
 import android.support.annotation.WorkerThread
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,6 +26,18 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
     @WorkerThread
     fun getNews(id:Int) : Flowable<List<News>> {
         return newsDao.getAllNews()
+    }
+
+    fun getNewsList(): Observable<List<News>>{
+        val api = TinkoffClient.Instance.api
+        return api.getResponse()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { response ->
+                val data = response.payload.toMutableList()
+                data.sortByDescending { it.publicationDate.milliseconds }
+                data.toList()
+            }
     }
 
 }
