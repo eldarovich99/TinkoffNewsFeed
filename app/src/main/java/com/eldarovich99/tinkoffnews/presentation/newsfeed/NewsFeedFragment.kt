@@ -1,6 +1,5 @@
 package com.eldarovich99.tinkoffnews.presentation.newsfeed
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,6 +11,7 @@ import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 import com.eldarovich99.tinkoffnews.di.factories.ViewModelFactory
 import com.eldarovich99.tinkoffnews.presentation.overviewNews.OverviewNewsFragment
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.news_feed_fragment.*
 import javax.inject.Inject
 
@@ -23,6 +23,8 @@ class NewsFeedFragment: Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var adapter: NewsFeedAdapter
     private var fragmentView: View? = null
+    private val compositeDisposable = CompositeDisposable()
+
     companion object {
         fun newInstance() : NewsFeedFragment{
             return NewsFeedFragment()
@@ -54,27 +56,37 @@ class NewsFeedFragment: Fragment() {
                     .commit()
             }
         })
-        viewModel.allNews.observe(this, Observer {news->
-            news?.let {
-                adapter.setNews(news)
-            }
-        })
+        val disposable = viewModel.getNewsList().doOnNext{news -> adapter.setNews(news)}.subscribe()
+        compositeDisposable.add(disposable)
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         news_feed_recycler.adapter = adapter
         swipe_refresh_layout.setOnRefreshListener {
-            viewModel.getNewsList()
-            //swipe_refresh_layout.isRefreshing = false
+            val disposable = viewModel.getNewsList()
+                .doOnComplete{swipe_refresh_layout.isRefreshing = false}
+                .doOnError{swipe_refresh_layout.isRefreshing = false}
+                .subscribe()
+            compositeDisposable.add(disposable)
         }
 
         super.onViewCreated(view, savedInstanceState)
     }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        news_feed_recycler.adapter = adapter
+//        swipe_refresh_layout.setOnRefreshListener {
+//            compositeDisposable = viewModel.getNewsList()
+//                .doOnComplete {swipe_refresh_layout.isRefreshing = false}
+//                .subscribe{news -> viewModel.allNews.postValue(news)}
+//        }
+//
+//        super.onViewCreated(view, savedInstanceState)
+//    }
 
 
     override fun onDestroyView() {
         news_feed_recycler.adapter = null
         fragmentView = null
+        compositeDisposable.clear()
         super.onDestroyView()
     }
 

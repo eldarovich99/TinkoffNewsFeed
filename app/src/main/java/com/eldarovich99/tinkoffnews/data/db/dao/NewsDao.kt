@@ -1,17 +1,14 @@
 package com.eldarovich99.tinkoffnews.data.db.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.eldarovich99.tinkoffnews.data.db.entity.News
 import io.reactivex.Flowable
 
 @Dao
 interface NewsDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(news: News)
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(news: List<News>)
     @Delete
     fun delete(news:News)

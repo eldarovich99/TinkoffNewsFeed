@@ -14,8 +14,8 @@ import javax.inject.Singleton
 
 @Singleton
 class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
-    val allNews: Flowable<List<News>> = newsDao.getAllNews()
-
+    //val allNews: Observable<List<News>> = newsDao.getAllNews()
+    val api = TinkoffClient.Instance.api
     @WorkerThread       // called on a worker thread
     fun insert(news: News){     // the modifier means that a function can be interrupted and then continued
         newsDao.insert(news)
@@ -25,13 +25,12 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
         newsDao.delete(news)
     }
     @WorkerThread
-    fun getNews(id:Int) : Flowable<List<News>> {
+    fun getNews() : Flowable<List<News>> {
         return newsDao.getAllNews()
     }
 
     fun getNewsList(): Observable<List<News>>{
-        val api = TinkoffClient.Instance.api
-        return api.getResponse()
+        return api.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .map { response ->
@@ -41,7 +40,11 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
                 launchInsertion(list)
                 list
             }
+            .onErrorResumeNext(getNews().toObservable())
+            .onErrorResumeNext(Observable.just(emptyList()))
     }
+
+
 
     private fun launchInsertion(news:List<News>){
         Completable.fromAction{ newsDao.insert(news) }
