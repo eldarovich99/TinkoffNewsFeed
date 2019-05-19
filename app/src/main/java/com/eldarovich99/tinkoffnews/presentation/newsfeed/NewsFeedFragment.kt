@@ -47,7 +47,7 @@ class NewsFeedFragment: Fragment() {
         ViewModelProviders.of(this, viewModelFactory).get(NewsViewModel::class.java)
         retainInstance = true
         adapter = NewsFeedAdapter(object : IOpenFragmentListener{
-            override fun openFragment(id: String) {
+            override fun openFragment(id: Int) {
                 activity!!.supportFragmentManager!!
                     .beginTransaction()
                     .replace(R.id.fragment_container, OverviewNewsFragment.newInstance(id))
@@ -84,5 +84,5 @@ class NewsFeedFragment: Fragment() {
 }
 
 interface IOpenFragmentListener{
-    fun openFragment(id: String)
+    fun openFragment(id: Int)
 }

@@ -24,9 +24,9 @@ class OverviewNewsFragment: Fragment() {
     lateinit var viewModelFactory: ViewModelFactory
 
     companion object {
-        fun newInstance(id:String): OverviewNewsFragment {
+        fun newInstance(id:Int): OverviewNewsFragment {
             val bundle = Bundle()
-            bundle.putString(NewsFeedFragment.BUNDLE_KEY, id)
+            bundle.putInt(NewsFeedFragment.BUNDLE_KEY, id)
             val fragment = OverviewNewsFragment()
             fragment.arguments = bundle
             return fragment
@@ -52,9 +52,9 @@ class OverviewNewsFragment: Fragment() {
             titleRaw[0] = titleRaw[0].capitalize()
             view.name_text_view.text = titleRaw.joinToString(" ")
             view.content_text_view.text = viewModel.news.text
-            view.id_text_view.text = getString(R.string.id, viewModel.news.id)
+            view.id_text_view.text = getString(R.string.id, viewModel.news.id.toString())
             view.date_text_view.text = SimpleDateFormat("dd.mm.yyyy", Locale("ru"))
-                .format(Date(viewModel.news.publicationDate.milliseconds))
+                .format(Date(viewModel.news.publicationDate))
                 .toString()
         }.subscribe()
         compositeDisposable.add(disposable)
