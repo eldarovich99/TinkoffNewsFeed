@@ -11,9 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.eldarovich99.tinkoffnews.Injector
 import com.eldarovich99.tinkoffnews.R
-import com.eldarovich99.tinkoffnews.data.utils.toDateString
 import com.eldarovich99.tinkoffnews.di.factories.ViewModelFactory
 import com.eldarovich99.tinkoffnews.presentation.newsfeed.NewsFeedFragment
+import com.eldarovich99.tinkoffnews.utils.toDateString
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.overview_fragment.view.*
 import javax.inject.Inject

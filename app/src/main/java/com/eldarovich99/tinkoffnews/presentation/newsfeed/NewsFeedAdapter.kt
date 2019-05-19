@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
-import com.eldarovich99.tinkoffnews.data.utils.toDateTimeString
+import com.eldarovich99.tinkoffnews.utils.toDateTimeString
 
 class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
 ) : RecyclerView.Adapter<NewsFeedAdapter.NewsFeedViewHolder>() {
