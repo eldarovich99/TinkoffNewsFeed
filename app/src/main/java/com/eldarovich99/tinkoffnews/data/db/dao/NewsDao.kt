@@ -15,7 +15,7 @@ interface NewsDao {
     @Delete
     fun delete(newsTitle:NewsTitle)
 
-    @Query("SELECT * FROM newstitle")
+    @Query("SELECT * FROM newstitle ORDER BY publicationDate DESC")
     fun getAllNews(): Flowable<List<NewsTitle>>
 
     @Query("SELECT * FROM newstitle WHERE id = :id")

@@ -18,7 +18,11 @@ AndroidViewModel(application) {
     fun getNewsList() : Observable<List<NewsTitle>> {
         return newsRepository
             .getNewsList(getApplication())
-            .doOnNext{news -> allNews.addAll(news)}
+            .doOnNext{
+                    news -> val mutable = news.toMutableList()
+                mutable.sortByDescending { it.publicationDate }
+                allNews.addAll(news)
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

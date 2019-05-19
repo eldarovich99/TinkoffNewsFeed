@@ -60,10 +60,10 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
                 launchInsertion(list)
                 list
             }
-//            .doOnError{
-//                Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
-//            }
-//            .onErrorResumeNext(getNews().toObservable())
+            .doOnError{
+                Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
+            }
+            .onErrorResumeNext(getNews().toObservable())
     }
 
     fun getContent(context: Context, id: Int) : Observable<ContentResponse>{
