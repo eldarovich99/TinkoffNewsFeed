@@ -46,7 +46,8 @@ class OverviewNewsFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.overview_fragment, container, false)
         val id = arguments?.getInt(NewsFeedFragment.BUNDLE_KEY)
-        val disposable = viewModel.getContent(id!!).doOnComplete{
+        val disposable = viewModel.getContent(id!!)
+            .doOnComplete{
             view.title_text_view.text = viewModel.fullNews.title.text
             view.content_text_view.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 Html.fromHtml(viewModel.fullNews.content, Html.FROM_HTML_MODE_COMPACT)
@@ -56,7 +57,8 @@ class OverviewNewsFragment: Fragment() {
             view.date_text_view.text = SimpleDateFormat("dd.mm.yyyy", Locale("ru"))
                 .format(Date(viewModel.fullNews.title.publicationDate))
                 .toString()
-        }.subscribe()
+        }
+            .subscribe()
         compositeDisposable.add(disposable)
         return view
     }

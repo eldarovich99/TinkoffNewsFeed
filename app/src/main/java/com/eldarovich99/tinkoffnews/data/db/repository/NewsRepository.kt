@@ -1,8 +1,6 @@
 package com.eldarovich99.tinkoffnews.data.db.repository
 
-import android.content.Context
 import android.support.annotation.WorkerThread
-import android.widget.Toast
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.ContentResponse
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
@@ -49,7 +47,7 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
         return newsDao.getContent(id)
     }
 
-    fun getNewsList(context: Context): Observable<List<NewsTitle>>{
+    fun getNewsList(): Observable<List<NewsTitle>>{
         return titleApi.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -60,20 +58,13 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
                 launchInsertion(list)
                 list
             }
-            .doOnError{
-                Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
-            }
-            .onErrorResumeNext(getNews().toObservable())
     }
 
-    fun getContent(context: Context, id: Int) : Observable<ContentResponse>{
+    fun getContent(id: Int) : Observable<ContentResponse>{
         return contentApi.getContent(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             //.doOnNext{news -> launchInsertion(news)}
-            .doOnError{
-                Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
-            }
     }
 
     private fun launchInsertion(newsTitles:List<NewsTitle>){

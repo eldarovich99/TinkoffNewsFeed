@@ -2,6 +2,7 @@ package com.eldarovich99.tinkoffnews.presentation.newsfeed
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.widget.Toast
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
 import com.eldarovich99.tinkoffnews.data.db.repository.NewsRepository
 import io.reactivex.Observable
@@ -17,12 +18,16 @@ AndroidViewModel(application) {
 
     fun getNewsList() : Observable<List<NewsTitle>> {
         return newsRepository
-            .getNewsList(getApplication())
+            .getNewsList()
             .doOnNext{
                     news -> val mutable = news.toMutableList()
                 mutable.sortByDescending { it.publicationDate }
                 allNews.addAll(news)
             }
+            .doOnError{
+                Toast.makeText(getApplication(), "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
+            }
+            .onErrorResumeNext(newsRepository.getNews().toObservable())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
