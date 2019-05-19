@@ -10,7 +10,6 @@ import com.eldarovich99.tinkoffnews.data.network.TinkoffApi
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
 import com.eldarovich99.tinkoffnews.data.network.deserializers.FullResponseDeserializer
 import com.eldarovich99.tinkoffnews.data.network.deserializers.TitleResponseDeserializer
-import com.google.gson.GsonBuilder
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -28,17 +27,16 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
         .getRetrofitInstance(ContentResponse::class.java, FullResponseDeserializer())
         .create(TinkoffApi::class.java)
 
-    val gson = GsonBuilder().create()
     @WorkerThread
-    fun insert(newsTitle: NewsTitle){
-        newsDao.insert(newsTitle)
+    fun insert(fullNews: FullNews){
+        newsDao.insert(fullNews)
     }
     @WorkerThread
     fun delete(newsTitle: NewsTitle){
         newsDao.delete(newsTitle)
     }
     @WorkerThread
-    fun getNews() : Flowable<List<NewsTitle>> {
+    fun getNewsFromDB() : Flowable<List<NewsTitle>> {
         return newsDao.getAllNews()
     }
     @WorkerThread
@@ -61,14 +59,24 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
 
     fun getContent(id: Int) : Observable<FullNews>{
         return contentApi.getContent(id)
-            .map { response -> response.payload }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            //.doOnNext{news -> launchInsertion(news)}
+            .map { response ->
+                val full = response.payload
+                launchInsertion(full)
+                full
+            }
     }
 
     private fun launchInsertion(newsTitles:List<NewsTitle>){
         Completable.fromAction{ newsDao.insert(newsTitles) }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
+    }
+
+    private fun launchInsertion(fullNews: FullNews){
+        Completable.fromAction{ newsDao.insert(fullNews) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()

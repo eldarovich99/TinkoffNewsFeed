@@ -2,6 +2,7 @@ package com.eldarovich99.tinkoffnews.presentation.overviewNews
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.widget.Toast
 import com.eldarovich99.tinkoffnews.data.db.entity.FullNews
 import com.eldarovich99.tinkoffnews.data.db.repository.NewsRepository
 import io.reactivex.Observable
@@ -16,10 +17,11 @@ class OverviewViewModel @Inject constructor(application: Application, val reposi
     fun getContent(id:Int) : Observable<FullNews>{
         return repository.getContent(id)
             .doOnNext{response -> fullNews = response}
-//            .doOnError{
-//                Toast.makeText(getApplication(), "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
-//            }
-//            .onErrorResumeNext(repository.getContentFromDB(id).toObservable())
+            .doOnError{
+                Toast.makeText(getApplication(), "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
+            }
+            .onErrorResumeNext(repository.getContentFromDB(id).toObservable())
+            .doOnNext{response -> fullNews = response}
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

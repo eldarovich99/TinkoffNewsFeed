@@ -16,9 +16,12 @@ interface NewsDao {
     @Delete
     fun delete(newsTitle:NewsTitle)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(fullNews: FullNews)
+
     @Query("SELECT * FROM newstitle ORDER BY publicationDate DESC")
     fun getAllNews(): Flowable<List<NewsTitle>>
 
-    @Query("SELECT * FROM fullnews WHERE id = :id")
+    @Query("SELECT * FROM fullnews WHERE contentId = :id LIMIT 1")
     fun getContent(id:Int) : Flowable<FullNews>
 }

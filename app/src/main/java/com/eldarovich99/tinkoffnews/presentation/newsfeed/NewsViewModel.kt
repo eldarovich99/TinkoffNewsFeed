@@ -27,7 +27,7 @@ AndroidViewModel(application) {
             .doOnError{
                 Toast.makeText(getApplication(), "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
             }
-            .onErrorResumeNext(newsRepository.getNews().toObservable())
+            .onErrorResumeNext(newsRepository.getNewsFromDB().toObservable())
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

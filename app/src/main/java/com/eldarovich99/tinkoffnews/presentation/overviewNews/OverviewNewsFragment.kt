@@ -47,7 +47,7 @@ class OverviewNewsFragment: Fragment() {
         val view = inflater.inflate(R.layout.overview_fragment, container, false)
         val id = arguments?.getInt(NewsFeedFragment.BUNDLE_KEY)
         val disposable = viewModel.getContent(id!!)
-            .doOnComplete{
+            .doOnNext{
             view.title_text_view.text = viewModel.fullNews.title.text
             view.content_text_view.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 Html.fromHtml(viewModel.fullNews.content, Html.FROM_HTML_MODE_COMPACT)
