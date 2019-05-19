@@ -17,8 +17,4 @@ abstract class ViewModelModule{
     @Binds
     @ViewModelKey(OverviewViewModel::class)
     abstract fun overviewViewModel(newsFeedViewModel:OverviewViewModel): ViewModel
-//    @IntoMap
-//    @Binds
-//    @ViewModelKey(OverviewViewModel::class)
-//    abstract fun overviewViewModel(overviewViewModel: OverviewViewModel): ViewModel
 }

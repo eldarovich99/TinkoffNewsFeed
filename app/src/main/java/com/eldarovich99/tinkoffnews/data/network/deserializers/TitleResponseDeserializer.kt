@@ -1,7 +1,7 @@
 package com.eldarovich99.tinkoffnews.data.network.deserializers
 
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
-import com.eldarovich99.tinkoffnews.data.db.entity.TitleResponse
+import com.eldarovich99.tinkoffnews.data.network.responses.TitleResponse
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement

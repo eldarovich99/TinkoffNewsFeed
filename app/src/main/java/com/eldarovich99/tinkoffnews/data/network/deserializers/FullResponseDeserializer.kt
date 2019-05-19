@@ -1,7 +1,7 @@
 package com.eldarovich99.tinkoffnews.data.network.deserializers
 
-import com.eldarovich99.tinkoffnews.data.db.entity.ContentResponse
 import com.eldarovich99.tinkoffnews.data.db.entity.FullNews
+import com.eldarovich99.tinkoffnews.data.network.responses.ContentResponse
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -22,7 +22,17 @@ class FullResponseDeserializer: JsonDeserializer<ContentResponse> {
         val typeId = payload.get("typeId").asString
         val resultCode = jsonObject.get("resultCode").asString
         val trackingId = jsonObject.get("trackingId").asString
-        return ContentResponse(FullNews(lastModificationDate, news, creationDate, content, bankInfoTypeId, typeId, news.id),resultCode, trackingId)
+        return ContentResponse(
+            FullNews(
+                lastModificationDate,
+                news,
+                creationDate,
+                content,
+                bankInfoTypeId,
+                typeId,
+                news.id
+            ), resultCode, trackingId
+        )
     }
 
 }

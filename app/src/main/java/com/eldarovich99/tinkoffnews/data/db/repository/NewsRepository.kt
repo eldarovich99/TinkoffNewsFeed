@@ -2,14 +2,14 @@ package com.eldarovich99.tinkoffnews.data.db.repository
 
 import android.support.annotation.WorkerThread
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
-import com.eldarovich99.tinkoffnews.data.db.entity.ContentResponse
 import com.eldarovich99.tinkoffnews.data.db.entity.FullNews
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
-import com.eldarovich99.tinkoffnews.data.db.entity.TitleResponse
 import com.eldarovich99.tinkoffnews.data.network.TinkoffApi
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
 import com.eldarovich99.tinkoffnews.data.network.deserializers.FullResponseDeserializer
 import com.eldarovich99.tinkoffnews.data.network.deserializers.TitleResponseDeserializer
+import com.eldarovich99.tinkoffnews.data.network.responses.ContentResponse
+import com.eldarovich99.tinkoffnews.data.network.responses.TitleResponse
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable

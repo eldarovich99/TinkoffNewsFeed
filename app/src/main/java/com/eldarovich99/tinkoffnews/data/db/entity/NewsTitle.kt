@@ -9,6 +9,4 @@ data class NewsTitle(var  name:String,
                      var text: String,
                      var publicationDate: Long,
                      var bankInfoTypeId: Int
-//                @Embedded  var lastModificationDate: PublicationDate,
-//                @Embedded  var creationDate: PublicationDate
 )

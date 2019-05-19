@@ -10,7 +10,7 @@ import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
 
 class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
 ) : RecyclerView.Adapter<NewsFeedAdapter.NewsFeedViewHolder>() {
-    private var news = emptyList<NewsTitle>() // Cached copy of news
+    private var news = emptyList<NewsTitle>()
 
     class NewsFeedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val wordItemView: TextView = itemView.findViewById(R.id.title_text_view)
