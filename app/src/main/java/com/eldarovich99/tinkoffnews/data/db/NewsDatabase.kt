@@ -5,9 +5,9 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
-import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
 
-@Database(entities = [News::class], version = 1, exportSchema = false)
+@Database(entities = [NewsTitle::class], version = 1, exportSchema = false)
 abstract class NewsDatabase: RoomDatabase() {
     abstract fun newsDao(): NewsDao
     companion object {

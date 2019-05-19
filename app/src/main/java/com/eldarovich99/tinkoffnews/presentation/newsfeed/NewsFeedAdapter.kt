@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.eldarovich99.tinkoffnews.R
-import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
 
 class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
 ) : RecyclerView.Adapter<NewsFeedAdapter.NewsFeedViewHolder>() {
-    private var news = emptyList<News>() // Cached copy of news
+    private var news = emptyList<NewsTitle>() // Cached copy of news
 
     class NewsFeedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val wordItemView: TextView = itemView.findViewById(R.id.title_text_view)
@@ -30,8 +30,8 @@ class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
         holder.wordItemView.text = current.text
     }
 
-    internal fun setNews(news: List<News>) {
-        this.news = news
+    internal fun setNews(newsTitles: List<NewsTitle>) {
+        this.news = newsTitles
         notifyDataSetChanged()
     }
 
@@ -41,7 +41,7 @@ class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
 
     override fun getItemCount() = news.size
 
-    fun getNewsAtPosition(position: Int): News {
+    fun getNewsAtPosition(position: Int): NewsTitle {
         return news[position]
     }
 }

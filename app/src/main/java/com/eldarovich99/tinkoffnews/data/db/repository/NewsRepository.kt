@@ -4,10 +4,12 @@ import android.content.Context
 import android.support.annotation.WorkerThread
 import android.widget.Toast
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
-import com.eldarovich99.tinkoffnews.data.db.entity.News
-import com.eldarovich99.tinkoffnews.data.db.entity.Response
+import com.eldarovich99.tinkoffnews.data.db.entity.ContentResponse
+import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
+import com.eldarovich99.tinkoffnews.data.db.entity.TitleResponse
 import com.eldarovich99.tinkoffnews.data.network.TinkoffApi
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
+import com.eldarovich99.tinkoffnews.data.network.deserializers.FullResponseDeserializerDeserializer
 import com.eldarovich99.tinkoffnews.data.network.deserializers.TitleResponseDeserializer
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -22,28 +24,32 @@ import javax.inject.Singleton
 @Singleton
 class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
     val titleApi = TinkoffClient.Instance
-        .getRetrofitInstance(Response::class.java, TitleResponseDeserializer())
+        .getRetrofitInstance(TitleResponse::class.java, TitleResponseDeserializer())
         .create(TinkoffApi::class.java)
+    val contentApi = TinkoffClient.Instance
+        .getRetrofitInstance(ContentResponse::class.java, FullResponseDeserializerDeserializer())
+        .create(TinkoffApi::class.java)
+
     val gson = GsonBuilder().create()
     @WorkerThread
-    fun insert(news: News){
-        newsDao.insert(news)
+    fun insert(newsTitle: NewsTitle){
+        newsDao.insert(newsTitle)
     }
     @WorkerThread
-    fun delete(news: News){
-        newsDao.delete(news)
+    fun delete(newsTitle: NewsTitle){
+        newsDao.delete(newsTitle)
     }
     @WorkerThread
-    fun getNews() : Flowable<List<News>> {
+    fun getNews() : Flowable<List<NewsTitle>> {
         val factory = RxJava2CallAdapterFactory.create()
         return newsDao.getAllNews()
     }
     @WorkerThread
-    fun getContentFromDB(id:String) : Flowable<News> {
+    fun getContentFromDB(id:String) : Flowable<NewsTitle> {
         return newsDao.getContent(id)
     }
 
-    fun getNewsList(context: Context): Observable<List<News>>{
+    fun getNewsList(context: Context): Observable<List<NewsTitle>>{
         return titleApi.getNews()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -60,18 +66,18 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
 //            .onErrorResumeNext(getNews().toObservable())
     }
 
-    fun getContent(context: Context, id: String) : Observable<List<News>>{
-        return titleApi.getContent(id)
+    fun getContent(context: Context, id: Int) : Observable<ContentResponse>{
+        return contentApi.getContent(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext{news -> launchInsertion(news)}
+            //.doOnNext{news -> launchInsertion(news)}
             .doOnError{
                 Toast.makeText(context, "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun launchInsertion(news:List<News>){
-        Completable.fromAction{ newsDao.insert(news) }
+    private fun launchInsertion(newsTitles:List<NewsTitle>){
+        Completable.fromAction{ newsDao.insert(newsTitles) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe()

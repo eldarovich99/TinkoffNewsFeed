@@ -45,16 +45,16 @@ class OverviewNewsFragment: Fragment() {
         Injector.getAppComponent().inject(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(OverviewViewModel::class.java)
         val view = inflater.inflate(R.layout.overview_fragment, container, false)
-        val id = arguments?.getString(NewsFeedFragment.BUNDLE_KEY)
+        val id = arguments?.getInt(NewsFeedFragment.BUNDLE_KEY)
         val disposable = viewModel.getContent(id!!).doOnComplete{
             //viewModel.news = arguments?.getParcelable(NewsFeedFragment.BUNDLE_KEY)!!
-            val titleRaw = viewModel.news.name.split("-").filter { item -> item.toIntOrNull() == null }.toMutableList()
+            val titleRaw = viewModel.newsTitle.name.split("-").filter { item -> item.toIntOrNull() == null }.toMutableList()
             titleRaw[0] = titleRaw[0].capitalize()
             view.name_text_view.text = titleRaw.joinToString(" ")
-            view.content_text_view.text = viewModel.news.text
-            view.id_text_view.text = getString(R.string.id, viewModel.news.id.toString())
+            view.content_text_view.text = viewModel.newsTitle.text
+            view.id_text_view.text = getString(R.string.id, viewModel.newsTitle.id.toString())
             view.date_text_view.text = SimpleDateFormat("dd.mm.yyyy", Locale("ru"))
-                .format(Date(viewModel.news.publicationDate))
+                .format(Date(viewModel.newsTitle.publicationDate))
                 .toString()
         }.subscribe()
         compositeDisposable.add(disposable)

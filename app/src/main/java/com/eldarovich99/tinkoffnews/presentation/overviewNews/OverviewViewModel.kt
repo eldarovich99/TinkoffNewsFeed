@@ -2,7 +2,8 @@ package com.eldarovich99.tinkoffnews.presentation.overviewNews
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import com.eldarovich99.tinkoffnews.data.db.entity.News
+import com.eldarovich99.tinkoffnews.data.db.entity.ContentResponse
+import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
 import com.eldarovich99.tinkoffnews.data.db.repository.NewsRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,12 +14,12 @@ import javax.inject.Inject
 class OverviewViewModel @Inject constructor(application: Application, val repository: NewsRepository):
     AndroidViewModel(application) {
     val compositeDisposable= CompositeDisposable()
-    lateinit var news: News
+    lateinit var newsTitle: NewsTitle
 
-    fun getContent(id:String) : Observable<List<News>>{
+    fun getContent(id:Int) : Observable<ContentResponse>{
         return repository.getContent(getApplication(), id)
             .subscribeOn(Schedulers.io())
-            .doOnNext{response -> news = response[0]}
+            .doOnNext{response -> newsTitle = response.payload.title}
             .observeOn(AndroidSchedulers.mainThread())
 //            .doOnNext{response -> news = response.payload[0]}
 //            .subscribe()
