@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
-import java.text.SimpleDateFormat
-import java.util.*
+import com.eldarovich99.tinkoffnews.data.utils.toDateTimeString
 
 class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
 ) : RecyclerView.Adapter<NewsFeedAdapter.NewsFeedViewHolder>() {
@@ -31,9 +30,7 @@ class NewsFeedAdapter internal constructor(val listener: IOpenFragmentListener
     override fun onBindViewHolder(holder: NewsFeedViewHolder, position: Int) {
         val current = news[position]
         holder.wordItemView.text = current.text
-        holder.dateItemView.text = SimpleDateFormat("dd.mm.yyyy  hh:mm:ss", Locale("ru"))
-            .format(Date(current.publicationDate))
-            .toString()
+        holder.dateItemView.text = current.publicationDate.toDateTimeString()
     }
 
     internal fun setNews(newsTitles: List<NewsTitle>) {

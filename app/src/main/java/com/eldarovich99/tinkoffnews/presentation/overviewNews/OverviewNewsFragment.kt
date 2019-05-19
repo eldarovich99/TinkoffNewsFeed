@@ -11,12 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.eldarovich99.tinkoffnews.Injector
 import com.eldarovich99.tinkoffnews.R
+import com.eldarovich99.tinkoffnews.data.utils.toDateString
 import com.eldarovich99.tinkoffnews.di.factories.ViewModelFactory
 import com.eldarovich99.tinkoffnews.presentation.newsfeed.NewsFeedFragment
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.overview_fragment.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 import javax.inject.Inject
 
 class OverviewNewsFragment: Fragment() {
@@ -54,9 +53,7 @@ class OverviewNewsFragment: Fragment() {
              else
                 Html.fromHtml(viewModel.fullNews.content)
             view.content_text_view.movementMethod = LinkMovementMethod.getInstance()
-            view.date_text_view.text = SimpleDateFormat("dd.mm.yyyy", Locale("ru"))
-                .format(Date(viewModel.fullNews.title.publicationDate))
-                .toString()
+            view.date_text_view.text = viewModel.fullNews.title.publicationDate.toDateString()
         }
             .subscribe()
         compositeDisposable.add(disposable)
