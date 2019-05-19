@@ -13,20 +13,19 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-    <TextView
-            tools:text="Это название"
-            android:layout_margin="@dimen/margin_standart"
-            android:id="@+id/title_text_view"
-            android:layout_width="wrap_content"
-            style="@style/SubText"
-            android:layout_height="wrap_content"/>
-    <TextView
-            tools:text="09.05.1945"
-            android:layout_gravity="end"
-            android:id="@+id/date_text_view"
-            style="@style/SubText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-</LinearLayout>
+        <TextView
+                tools:text="09.05.1945"
+                android:id="@+id/date_text_view"
+                style="@style/SubText"
+                android:layout_marginStart="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <TextView
+                tools:text="Это название"
+                android:layout_margin="@dimen/margin_standart"
+                android:id="@+id/title_text_view"
+                android:layout_width="wrap_content"
+                style="@style/MainText"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
 </android.support.v7.widget.CardView>
