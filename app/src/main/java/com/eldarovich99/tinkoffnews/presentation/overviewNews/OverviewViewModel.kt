@@ -3,6 +3,7 @@ package com.eldarovich99.tinkoffnews.presentation.overviewNews
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.widget.Toast
+import com.eldarovich99.tinkoffnews.R
 import com.eldarovich99.tinkoffnews.data.db.entity.FullNews
 import com.eldarovich99.tinkoffnews.data.db.repository.NewsRepository
 import io.reactivex.Observable
@@ -18,7 +19,7 @@ class OverviewViewModel @Inject constructor(application: Application, val reposi
         return repository.getContent(id)
             .doOnNext{response -> fullNews = response}
             .doOnError{
-                Toast.makeText(getApplication(), "Проверьте сетевое подключение", Toast.LENGTH_SHORT).show()
+                Toast.makeText(getApplication(), getApplication<Application>().resources.getString(R.string.check_connection), Toast.LENGTH_SHORT).show()
             }
             .onErrorResumeNext(repository.getContentFromDB(id).toObservable())
             .doOnNext{response -> fullNews = response}

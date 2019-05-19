@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Tinkoff News</string>
-    <string name="id">id: %1$s</string>
+    <string name="check_connection">"Please check your network connection."</string>
 </resources>
