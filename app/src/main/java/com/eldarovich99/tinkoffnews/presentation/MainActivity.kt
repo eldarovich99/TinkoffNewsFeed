@@ -11,7 +11,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Injector.getAppComponent().inject(this)
         if (supportFragmentManager.backStackEntryCount == 0)
         supportFragmentManager
             .beginTransaction()

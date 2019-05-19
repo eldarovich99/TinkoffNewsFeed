@@ -1,8 +1,11 @@
 package com.eldarovich99.tinkoffnews.presentation.overviewNews
 
 import android.arch.lifecycle.ViewModelProviders
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,27 +37,24 @@ class OverviewNewsFragment: Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Injector.getAppComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(OverviewViewModel::class.java)
         retainInstance = true
         super.onCreate(savedInstanceState)
     }
 
-//    private val viewModel:OverviewViewModel by lazy{
-//        ViewModelProviders.of(this).get(OverviewViewModel::class.java)
-//    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Injector.getAppComponent().inject(this)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(OverviewViewModel::class.java)
         val view = inflater.inflate(R.layout.overview_fragment, container, false)
         val id = arguments?.getInt(NewsFeedFragment.BUNDLE_KEY)
         val disposable = viewModel.getContent(id!!).doOnComplete{
-            //viewModel.news = arguments?.getParcelable(NewsFeedFragment.BUNDLE_KEY)!!
-            val titleRaw = viewModel.newsTitle.name.split("-").filter { item -> item.toIntOrNull() == null }.toMutableList()
-            titleRaw[0] = titleRaw[0].capitalize()
-            view.name_text_view.text = titleRaw.joinToString(" ")
-            view.content_text_view.text = viewModel.newsTitle.text
-            view.id_text_view.text = getString(R.string.id, viewModel.newsTitle.id.toString())
+            view.title_text_view.text = viewModel.fullNews.title.text
+            view.content_text_view.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                Html.fromHtml(viewModel.fullNews.content, Html.FROM_HTML_MODE_COMPACT)
+             else
+                Html.fromHtml(viewModel.fullNews.content)
+            view.content_text_view.movementMethod = LinkMovementMethod.getInstance()
             view.date_text_view.text = SimpleDateFormat("dd.mm.yyyy", Locale("ru"))
-                .format(Date(viewModel.newsTitle.publicationDate))
+                .format(Date(viewModel.fullNews.title.publicationDate))
                 .toString()
         }.subscribe()
         compositeDisposable.add(disposable)
