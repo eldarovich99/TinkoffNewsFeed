@@ -3,14 +3,14 @@ package com.eldarovich99.tinkoffnews.data.db.repository
 import android.support.annotation.WorkerThread
 import com.eldarovich99.tinkoffnews.data.db.dao.NewsDao
 import com.eldarovich99.tinkoffnews.data.db.entity.ContentResponse
+import com.eldarovich99.tinkoffnews.data.db.entity.FullNews
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
 import com.eldarovich99.tinkoffnews.data.db.entity.TitleResponse
 import com.eldarovich99.tinkoffnews.data.network.TinkoffApi
 import com.eldarovich99.tinkoffnews.data.network.TinkoffClient
-import com.eldarovich99.tinkoffnews.data.network.deserializers.FullResponseDeserializerDeserializer
+import com.eldarovich99.tinkoffnews.data.network.deserializers.FullResponseDeserializer
 import com.eldarovich99.tinkoffnews.data.network.deserializers.TitleResponseDeserializer
 import com.google.gson.GsonBuilder
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -25,7 +25,7 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
         .getRetrofitInstance(TitleResponse::class.java, TitleResponseDeserializer())
         .create(TinkoffApi::class.java)
     val contentApi = TinkoffClient.Instance
-        .getRetrofitInstance(ContentResponse::class.java, FullResponseDeserializerDeserializer())
+        .getRetrofitInstance(ContentResponse::class.java, FullResponseDeserializer())
         .create(TinkoffApi::class.java)
 
     val gson = GsonBuilder().create()
@@ -39,11 +39,10 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
     }
     @WorkerThread
     fun getNews() : Flowable<List<NewsTitle>> {
-        val factory = RxJava2CallAdapterFactory.create()
         return newsDao.getAllNews()
     }
     @WorkerThread
-    fun getContentFromDB(id:String) : Flowable<NewsTitle> {
+    fun getContentFromDB(id:Int) : Flowable<FullNews> {
         return newsDao.getContent(id)
     }
 
@@ -60,8 +59,9 @@ class NewsRepository @Inject constructor(private val newsDao: NewsDao) {
             }
     }
 
-    fun getContent(id: Int) : Observable<ContentResponse>{
+    fun getContent(id: Int) : Observable<FullNews>{
         return contentApi.getContent(id)
+            .map { response -> response.payload }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             //.doOnNext{news -> launchInsertion(news)}

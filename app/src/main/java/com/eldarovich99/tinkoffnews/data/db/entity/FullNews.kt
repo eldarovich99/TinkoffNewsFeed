@@ -1,9 +1,15 @@
 package com.eldarovich99.tinkoffnews.data.db.entity
 
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+
+@Entity
 data class FullNews(var lastModificationDate: Long,
-                    var title: NewsTitle,
+                    @Embedded var title: NewsTitle,
                     var creationDate: Long,
                     var content: String,
-                    var bankInfoTypeId: Int,
-                    var typeId:String
+                    var infoTypeId: Int,
+                    var typeId:String,
+                    @PrimaryKey var contentId:Int
 )

@@ -7,7 +7,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
 
-class FullResponseDeserializerDeserializer: JsonDeserializer<ContentResponse> {
+class FullResponseDeserializer: JsonDeserializer<ContentResponse> {
     override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): ContentResponse {
         val jsonObject = json?.asJsonObject
         val payload = jsonObject?.get("payload")?.asJsonObject
@@ -22,7 +22,7 @@ class FullResponseDeserializerDeserializer: JsonDeserializer<ContentResponse> {
         val typeId = payload.get("typeId").asString
         val resultCode = jsonObject.get("resultCode").asString
         val trackingId = jsonObject.get("trackingId").asString
-        return ContentResponse(FullNews(lastModificationDate, news, creationDate, content, bankInfoTypeId, typeId),resultCode, trackingId)
+        return ContentResponse(FullNews(lastModificationDate, news, creationDate, content, bankInfoTypeId, typeId, news.id),resultCode, trackingId)
     }
 
 }

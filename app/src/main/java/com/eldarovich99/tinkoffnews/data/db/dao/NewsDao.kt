@@ -1,6 +1,7 @@
 package com.eldarovich99.tinkoffnews.data.db.dao
 
 import android.arch.persistence.room.*
+import com.eldarovich99.tinkoffnews.data.db.entity.FullNews
 import com.eldarovich99.tinkoffnews.data.db.entity.NewsTitle
 import io.reactivex.Flowable
 
@@ -18,6 +19,6 @@ interface NewsDao {
     @Query("SELECT * FROM newstitle ORDER BY publicationDate DESC")
     fun getAllNews(): Flowable<List<NewsTitle>>
 
-    @Query("SELECT * FROM newstitle WHERE id = :id")
-    fun getContent(id:String) : Flowable<NewsTitle>
+    @Query("SELECT * FROM fullnews WHERE id = :id")
+    fun getContent(id:Int) : Flowable<FullNews>
 }
